@@ -63,4 +63,16 @@ assert.equal(token.start, 3);
 assert.equal(token.length, 1);
 assert.equal(token.getValue(), ';');
 
+// process new line
+
+var result = tokenizer.getTokens("\n");
+assert.ok(result);
+assert.ok(Array.isArray(result));
+assert.equal(result.length, 1);
+
+var token = result[0];
+assert.equal(token.start, 0);
+assert.equal(token.length, 1);
+assert.ok(!token.whitespace);
+assert.equal(token.getValue(), '\n');
 
