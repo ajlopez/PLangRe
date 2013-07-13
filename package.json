@@ -7,7 +7,7 @@
 , "main": "./lib/plangre.js"
 , "engines": { "node": ">= 0.6.0 && < 0.11.0" }
 , "scripts": {
-    "test": "nodeunit test"
+    "test": "node ./test.js"
   }
 , "bin": {
     "plangre": "./bin/plangre"
