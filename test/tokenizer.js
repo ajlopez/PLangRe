@@ -13,5 +13,8 @@ var result = tokenizer.getTokens(":");
 assert.ok(result);
 assert.ok(Array.isArray(result));
 assert.equal(result.length, 1);
-assert.equal(result[0], ':');
+var token = result[0];
+assert.equal(token.start, 0);
+assert.equal(token.length, 1);
+assert.equal(token.getValue(), ':');
 
