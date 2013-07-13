@@ -106,3 +106,18 @@ assert.ok(!token.newline);
 assert.ok(token.digits);
 assert.equal(token.getValue(), '1234567890');
 
+// process word
+
+var result = tokenizer.getTokens("ALFAbeta");
+assert.ok(result);
+assert.ok(Array.isArray(result));
+assert.equal(result.length, 1);
+
+var token = result[0];
+assert.equal(token.start, 0);
+assert.equal(token.length, 8);
+assert.ok(!token.whitespace);
+assert.ok(!token.newline);
+assert.ok(!token.digits);
+assert.ok(token.word);
+assert.equal(token.getValue(), 'ALFAbeta');
