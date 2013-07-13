@@ -16,7 +16,7 @@ assert.equal(result.length, 1);
 var token = result[0];
 assert.equal(token.start, 0);
 assert.equal(token.length, 1);
-assert.equal(token.getValue(), ':');
+assert.equal(token.value, ':');
 
 // get tokens on two chars
 
@@ -27,11 +27,11 @@ assert.equal(result.length, 2);
 var token = result[0];
 assert.equal(token.start, 0);
 assert.equal(token.length, 1);
-assert.equal(token.getValue(), ':');
+assert.equal(token.value, ':');
 var token = result[1];
 assert.equal(token.start, 1);
 assert.equal(token.length, 1);
-assert.equal(token.getValue(), ';');
+assert.equal(token.value, ';');
 
 // recognize white spaces
 
@@ -43,7 +43,7 @@ var token = result[0];
 assert.equal(token.start, 0);
 assert.equal(token.length, 3);
 assert.ok(token.whitespace);
-assert.equal(token.getValue(), '   ');
+assert.equal(token.value, '   ');
 
 // process whitespace and character
 
@@ -56,12 +56,12 @@ var token = result[0];
 assert.equal(token.start, 0);
 assert.equal(token.length, 3);
 assert.ok(token.whitespace);
-assert.equal(token.getValue(), '   ');
+assert.equal(token.value, '   ');
 
 var token = result[1];
 assert.equal(token.start, 3);
 assert.equal(token.length, 1);
-assert.equal(token.getValue(), ';');
+assert.equal(token.value, ';');
 
 // process new line
 
@@ -75,7 +75,7 @@ assert.equal(token.start, 0);
 assert.equal(token.length, 1);
 assert.ok(!token.whitespace);
 assert.ok(token.newline);
-assert.equal(token.getValue(), '\n');
+assert.equal(token.value, '\n');
 
 // process carriage return and new line as new line
 
@@ -89,7 +89,7 @@ assert.equal(token.start, 0);
 assert.equal(token.length, 2);
 assert.ok(!token.whitespace);
 assert.ok(token.newline);
-assert.equal(token.getValue(), '\r\n');
+assert.equal(token.value, '\r\n');
 
 // process digits
 
@@ -104,7 +104,7 @@ assert.equal(token.length, 10);
 assert.ok(!token.whitespace);
 assert.ok(!token.newline);
 assert.ok(token.digits);
-assert.equal(token.getValue(), '1234567890');
+assert.equal(token.value, '1234567890');
 
 // process word
 
@@ -120,4 +120,4 @@ assert.ok(!token.whitespace);
 assert.ok(!token.newline);
 assert.ok(!token.digits);
 assert.ok(token.word);
-assert.equal(token.getValue(), 'ALFAbeta');
+assert.equal(token.value, 'ALFAbeta');
