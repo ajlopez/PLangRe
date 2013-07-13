@@ -33,3 +33,16 @@ assert.equal(token.start, 1);
 assert.equal(token.length, 1);
 assert.equal(token.getValue(), ';');
 
+// recognize white spaces
+
+var result = tokenizer.getTokens("   ");
+assert.ok(result);
+assert.ok(Array.isArray(result));
+assert.equal(result.length, 1);
+var token = result[0];
+assert.equal(token.start, 0);
+assert.equal(token.length, 3);
+assert.ok(token.whitespace);
+assert.equal(token.getValue(), '   ');
+
+
