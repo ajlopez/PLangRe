@@ -91,3 +91,18 @@ assert.ok(!token.whitespace);
 assert.ok(token.newline);
 assert.equal(token.getValue(), '\r\n');
 
+// process digits
+
+var result = tokenizer.getTokens("1234567890");
+assert.ok(result);
+assert.ok(Array.isArray(result));
+assert.equal(result.length, 1);
+
+var token = result[0];
+assert.equal(token.start, 0);
+assert.equal(token.length, 10);
+assert.ok(!token.whitespace);
+assert.ok(!token.newline);
+assert.ok(token.digits);
+assert.equal(token.getValue(), '1234567890');
+
