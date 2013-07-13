@@ -1,0 +1,19 @@
+{ "name": "plangre"
+, "description": "Mule-like components processing arbitrary messages"
+, "keywords": [ "mule", "esb", "messaging", "message", "component", "bus" ]
+, "version": "0.0.1alpha"
+, "author": "Angel 'Java' Lopez <webmaster@ajlopez.com> (http://www.ajlopez.com)"
+, "repository": { "type": "git", "url": "git://github.com/ajlopez/PLangRe.git" }
+, "main": "./lib/plangre.js"
+, "engines": { "node": ">= 0.6.0 && < 0.11.0" }
+, "scripts": {
+    "test": "nodeunit test"
+  }
+, "bin": {
+    "plangre": "./bin/plangre"
+  }
+, "dependencies": {
+  }
+, "devDependencies": {
+  }
+}
