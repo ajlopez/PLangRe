@@ -74,5 +74,20 @@ var token = result[0];
 assert.equal(token.start, 0);
 assert.equal(token.length, 1);
 assert.ok(!token.whitespace);
+assert.ok(token.newline);
 assert.equal(token.getValue(), '\n');
+
+// process carriage return and new line as new line
+
+var result = tokenizer.getTokens("\r\n");
+assert.ok(result);
+assert.ok(Array.isArray(result));
+assert.equal(result.length, 1);
+
+var token = result[0];
+assert.equal(token.start, 0);
+assert.equal(token.length, 2);
+assert.ok(!token.whitespace);
+assert.ok(token.newline);
+assert.equal(token.getValue(), '\r\n');
 
