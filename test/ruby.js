@@ -93,3 +93,21 @@ var text = 'x || y';
 
 var result = checker.check(text, ruby);
 assert.equal(Object.keys(result).length, 0);
+
+// instance variable
+
+var text = '@name';
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
+
+// class variable
+
+var text = '@@name';
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 2);
