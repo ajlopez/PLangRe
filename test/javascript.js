@@ -134,6 +134,14 @@ assert.ok(result);
 assert.ok(result.javascript);
 assert.equal(result.javascript, 1);
 
+// name colon newline not recognized
+
+var text = 'name:\n';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(Object.keys(result).length, 0);
+
 // anonymous function
 
 var text = 'function()';
@@ -151,3 +159,29 @@ var result = checker.check(text, javascript);
 assert.ok(result);
 assert.ok(result.javascript);
 assert.equal(result.javascript, 2);
+
+// for without parenthesis is negative
+
+var text = 'for name';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(result.javascript, 0);
+
+// while without parenthesis is negative
+
+var text = 'while name';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(result.javascript, 0);
+
+// if without parenthesis is negative
+
+var text = 'if name';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(result.javascript, 0);
+
+
