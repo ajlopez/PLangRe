@@ -3,10 +3,5 @@ var prangle = require('..'),
     fs = require('fs'),
     path = require('path'),
     assert = require('assert');
-    
-var text = fs.readFileSync(path.join(__dirname, '..', 'files', 'ruby', 'gist01.rb')).toString();
-var result = prangle.analyze(text);
-
-assert.ok(result);
-assert.equal(result, 'ruby');
-
+    processFile('gist01.rb');
+processFile('gist02.rb');processFile('gist04a.rb');processFile('gist04b.rb');processFile('gist04c.rb');function processFile(filename) {    var text = fs.readFileSync(path.join(__dirname, '..', 'files', 'ruby', filename)).toString();    var result = prangle.analyze(text);    assert.ok(result);    assert.equal(result, 'ruby');}
