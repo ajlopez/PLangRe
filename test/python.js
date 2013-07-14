@@ -99,3 +99,17 @@ assert.ok(result);
 assert.ok(result.python);
 assert.equal(result.python, 3);
 
+// try:
+
+var result = checker.check("try:", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 2);
+
+// except ... colon
+
+var result = checker.check("except e:", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 2);
+
