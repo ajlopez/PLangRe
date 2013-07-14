@@ -11,6 +11,7 @@ processFile('gist04b.rb');
 processFile('gist04c.rb');
 processFile('gist05.rb');
 processFile('gist06.rb');
+processFile('gist07.rb');
 
 function processFile(filename) {
     var text = fs.readFileSync(path.join(__dirname, '..', 'files', 'ruby', filename)).toString();

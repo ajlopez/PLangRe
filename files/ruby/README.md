@@ -8,4 +8,5 @@
 - [gist04a.rb](gist04a.rb), [gist04b.rb](gist04b.rb), [gist04c.rb](gist04c.rb) from https://gist.github.com/itchy/4665116
 - [gist05.rb](gist05.rb)
 - [gist06.rb](gist06.rb) from https://gist.github.com/abriening/1355236
+- [gist07.rb](gist07.rb) from https://gist.github.com/apeckham/3278188
 

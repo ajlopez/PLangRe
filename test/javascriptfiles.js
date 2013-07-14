@@ -5,7 +5,7 @@ var prangle = require('..'),
     assert = require('assert');
 
 processFile('gist01.js');
-processFile('gist02.js');processFile('gist03.js');processFile('gist04.js');processFile('gist05.js');processFile('gist06.js');
+processFile('gist02.js');processFile('gist03.js');processFile('gist04.js');processFile('gist05.js');processFile('gist06.js');processFile('gist07.js');
 function processFile(filename) {
     var text = fs.readFileSync(path.join(__dirname, '..', 'files', 'javascript', filename)).toString();
     var result = prangle.analyze(text);
