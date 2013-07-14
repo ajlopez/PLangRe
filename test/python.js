@@ -92,3 +92,10 @@ assert.ok(result);
 assert.ok(result.python);
 assert.equal(result.python, 3);
 
+// __name__, __file__, __init__
+
+var result = checker.check("__name__ __file__ __init__", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 3);
+
