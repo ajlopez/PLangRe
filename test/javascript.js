@@ -79,3 +79,57 @@ var result = checker.check(text, javascript);
 assert.ok(result);
 assert.ok(result.javascript);
 assert.equal(result.javascript, 1);
+
+// name in JSON
+
+var text = 'name: 1';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
+
+// name with whitespace in JSON
+
+var text = 'name : 1';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
+
+// single quote name in JSON
+
+var text = "'name': 1";
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
+
+// double quote name in JSON
+
+var text = '"name": 1';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
+
+// single quote name, whitespace in JSON
+
+var text = "'name' : 1";
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
+
+// double quote name, whitespace in JSON
+
+var text = '"name" : 1';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
