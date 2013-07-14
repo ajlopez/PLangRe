@@ -5,6 +5,7 @@ var prangle = require('..'),
     assert = require('assert');
 
 processFile('gist01.py');
+processFile('gist02.py');
 
 function processFile(filename) {
     var text = fs.readFileSync(path.join(__dirname, '..', 'files', 'python', filename)).toString();
