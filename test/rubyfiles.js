@@ -6,7 +6,7 @@ var prangle = require('..'),
 
 processFile('gist01.rb');
 processFile('gist02.rb');
-processFile('gist04a.rb');
+processFile('gist03.rb');processFile('gist04a.rb');
 processFile('gist04b.rb');
 processFile('gist04c.rb');
 

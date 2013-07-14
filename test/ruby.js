@@ -68,3 +68,28 @@ var result = checker.check(text, ruby);
 assert.ok(result);
 assert.ok(result.ruby);
 assert.equal(result.ruby, 1);
+
+// lambda parameter 1
+
+var text = '|x|';
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
+
+// lambda parameter 2
+
+var text = '| x y |';
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
+
+// no lambda parameter
+
+var text = 'x || y';
+
+var result = checker.check(text, ruby);
+assert.equal(Object.keys(result).length, 0);
