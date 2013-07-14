@@ -36,3 +36,17 @@ assert.ok(result);
 assert.ok(result.python);
 assert.equal(result.python, 3);
 
+// shebang
+
+var result = checker.check("#!/usr/bin/python", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 1);
+
+// shebang with env
+
+var result = checker.check("#!/usr/bin/env python", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 1);
+
