@@ -8,6 +8,7 @@ processFile('gist01.py');
 processFile('gist02.py');
 processFile('gist03.py');
 processFile('gist04.py');
+processFile('gist05.py');
 
 function processFile(filename) {
     var text = fs.readFileSync(path.join(__dirname, '..', 'files', 'python', filename)).toString();
