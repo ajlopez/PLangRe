@@ -41,3 +41,30 @@ var result = checker.check(text, ruby);
 assert.ok(result);
 assert.ok(result.ruby);
 assert.equal(result.ruby, 1);
+
+// require with single quote string
+
+var text = "require 'rack'";
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
+
+// require with double quote string
+
+var text = 'require "rack"';
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
+
+// require with name
+
+var text = 'require modulename';
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
