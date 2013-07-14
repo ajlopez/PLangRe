@@ -33,3 +33,11 @@ assert.ok(result);
 assert.ok(result.ruby);
 assert.equal(result.ruby, 39);
 
+// shebang
+
+text = "#!/usr/bin/ruby";
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
