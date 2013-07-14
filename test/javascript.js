@@ -52,3 +52,30 @@ var result = checker.check(text, javascript);
 assert.ok(result);
 assert.ok(result.javascript);
 assert.equal(result.javascript, 1);
+
+// line comment
+
+var text = '// a line comment';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
+
+// strict equal
+
+var text = 'a === b';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
+
+// strict not equal
+
+var text = 'a !== b';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 1);
