@@ -133,3 +133,21 @@ var result = checker.check(text, javascript);
 assert.ok(result);
 assert.ok(result.javascript);
 assert.equal(result.javascript, 1);
+
+// anonymous function
+
+var text = 'function()';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 2);
+
+// anonymous function with whitespace
+
+var text = 'function ()';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 2);
