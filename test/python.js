@@ -50,3 +50,45 @@ assert.ok(result);
 assert.ok(result.python);
 assert.equal(result.python, 1);
 
+// class ... colon
+
+var result = checker.check("class Dog:", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 2);
+
+// if ... colon
+
+var result = checker.check("if x:", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 2);
+
+// while ... colon
+
+var result = checker.check("while x:", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 2);
+
+// for ... colon
+
+var result = checker.check("for x in y:", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 3);
+
+// def ... colon
+
+var result = checker.check("def test():", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 2);
+
+// def with self
+
+var result = checker.check("def test(self, name):", python);
+assert.ok(result);
+assert.ok(result.python);
+assert.equal(result.python, 3);
+
