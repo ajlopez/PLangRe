@@ -119,4 +119,13 @@ var text = 'MyModule::MyClass';
 var result = checker.check(text, ruby);
 assert.ok(result);
 assert.ok(result.ruby);
-assert.equal(result.ruby, 2);
+assert.equal(result.ruby, 3);
+
+// keyword
+
+var text = ':keyword';
+
+var result = checker.check(text, ruby);
+assert.ok(result);
+assert.ok(result.ruby);
+assert.equal(result.ruby, 1);
