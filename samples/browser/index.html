@@ -1,0 +1,42 @@
+<html>
+<head>
+
+<title>Plangre Demo</title>
+<script src="../../js/plangre.js"></script>
+</head>
+
+<body>
+<h1>Plangre Demo</h1>
+<pre id='result'>
+unknown
+</pre>
+<textarea id='code' style='width: 80%; height: 80%'>
+</textarea>
+</body>
+<script>
+var code = document.getElementById('code');
+var result = document.getElementById('result');
+var lasttext = '';
+
+function analyze() {
+    var text = code.value;
+    if (lasttext == text) {
+        setTimeout(analyze, 1000);
+        return;
+    }
+    
+    lasttext = text;
+    
+    var language = plangre.analyze(text);
+    
+    if (!language)
+        language = 'unknown';
+
+    result.innerHTML = language;
+    
+    setTimeout(analyze, 1000);
+}
+
+setTimeout(analyze, 1000);
+</script>
+</html>
