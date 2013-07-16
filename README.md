@@ -30,7 +30,8 @@ TBD
 
 ## Inception
 
-It was born from an email at Python Argentina list, for a pastebin project named Kilink.
+It was born from an email at Python Argentina list, for a pastebin project named Kilink. See Spanish
+post [Kilink, el pastebin útil](http://www.taniquetil.com.ar/plog/post/1/608).
 
 ## Contribution
 
