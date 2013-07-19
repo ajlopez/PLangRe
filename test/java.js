@@ -23,3 +23,15 @@ var tokens = tokenizer.getTokens(text);
 for (var k = 0; k < tokens.length; k++)
     if (tokens[k].word)
         assert.equal(java.reservedWord(text, tokens, k, { }), 'java');
+        
+var types = "\
+byte char short int long \
+float double boolean \
+String Object";
+
+var tokens = tokenizer.getTokens(types);
+
+for (var k = 0; k < tokens.length; k++)
+    if (tokens[k].word)
+        assert.equal(java.typeWord(text, tokens, k, { }), 'java');
+
