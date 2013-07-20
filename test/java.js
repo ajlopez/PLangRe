@@ -35,3 +35,13 @@ for (var k = 0; k < tokens.length; k++)
     if (tokens[k].word)
         assert.equal(java.typeWord(text, tokens, k, { }), 'java');
 
+// line comment
+
+var text = '// a line comment';
+
+var result = checker.check(text, java);
+assert.ok(result);
+assert.ok(result.java);
+assert.equal(result.java, 1);
+
+
