@@ -36,3 +36,22 @@ var tokens = tokenizer.getTokens(text);
 for (var k = 0; k < tokens.length; k++)
     if (tokens[k].word)
         assert.equal(csharp.reservedWord(text, tokens, k, { }), 'csharp');
+
+// line comment
+
+var text = '// a line comment';
+
+var result = checker.check(text, csharp);
+assert.ok(result);
+assert.ok(result.csharp);
+assert.equal(result.csharp, 1);
+
+// comment
+
+var text = '/* a comment */';
+
+var result = checker.check(text, csharp);
+assert.ok(result);
+assert.ok(result.csharp);
+assert.equal(result.csharp, 2);
+
