@@ -193,4 +193,36 @@ var result = checker.check(text, javascript);
 assert.ok(result);
 assert.equal(result.javascript, 0);
 
+// semicolon and new line
+
+var text = 'k;\n';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(result.javascript, 1);
+
+// semicolon, white space and new line
+
+var text = 'k;   \n';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(result.javascript, 1);
+
+// semicolon, carriage return, new line
+
+var text = 'k;\r\n';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(result.javascript, 1);
+
+// semicolon, white space, carriage return, new line
+
+var text = 'k;  \t\r\n';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.equal(result.javascript, 1);
+
 
