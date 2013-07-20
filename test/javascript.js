@@ -62,6 +62,15 @@ assert.ok(result);
 assert.ok(result.javascript);
 assert.equal(result.javascript, 1);
 
+// comment
+
+var text = '/* a comment */';
+
+var result = checker.check(text, javascript);
+assert.ok(result);
+assert.ok(result.javascript);
+assert.equal(result.javascript, 2);
+
 // strict equal
 
 var text = 'a === b';

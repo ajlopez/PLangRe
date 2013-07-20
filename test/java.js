@@ -44,4 +44,14 @@ assert.ok(result);
 assert.ok(result.java);
 assert.equal(result.java, 1);
 
+// comment
+
+var text = '/* a comment */';
+
+var result = checker.check(text, java);
+assert.ok(result);
+assert.ok(result.java);
+assert.equal(result.java, 2);
+
+
 
