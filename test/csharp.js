@@ -55,3 +55,26 @@ assert.ok(result);
 assert.ok(result.csharp);
 assert.equal(result.csharp, 2);
 
+// semicolon, white space and new line
+
+var text = 'k;   \n';
+
+var result = checker.check(text, csharp);
+assert.ok(result);
+assert.equal(result.csharp, 1);
+
+// semicolon, carriage return, new line
+
+var text = 'k;\r\n';
+
+var result = checker.check(text, csharp);
+assert.ok(result);
+assert.equal(result.csharp, 1);
+
+// semicolon, white space, carriage return, new line
+
+var text = 'k;  \t\r\n';
+
+var result = checker.check(text, csharp);
+assert.ok(result);
+assert.equal(result.csharp, 1);

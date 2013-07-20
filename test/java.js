@@ -53,5 +53,27 @@ assert.ok(result);
 assert.ok(result.java);
 assert.equal(result.java, 2);
 
+// semicolon, white space and new line
 
+var text = 'k;   \n';
+
+var result = checker.check(text, java);
+assert.ok(result);
+assert.equal(result.java, 1);
+
+// semicolon, carriage return, new line
+
+var text = 'k;\r\n';
+
+var result = checker.check(text, java);
+assert.ok(result);
+assert.equal(result.java, 1);
+
+// semicolon, white space, carriage return, new line
+
+var text = 'k;  \t\r\n';
+
+var result = checker.check(text, java);
+assert.ok(result);
+assert.equal(result.java, 1);
 
