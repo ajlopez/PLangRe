@@ -77,3 +77,10 @@ var result = checker.check(text, java);
 assert.ok(result);
 assert.equal(result.java, 1);
 
+// import with dotted name
+
+var text = 'import java.io;';
+
+var result = checker.check(text, java);
+assert.ok(result);
+assert.equal(result.java, 2);

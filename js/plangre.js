@@ -99,30 +99,6 @@ var tokenizer = (function () {
 if (typeof module !== 'undefined' && module && module.exports)
     module.exports = tokenizer;
 
-var functions = (function() {
-    function recognize(language, trigger, weight) {
-        var fn;
-        
-        if (typeof language === 'function')
-            fn = function(text, tokens, position, state) { return language(text, tokens, position, state); };
-        else
-            fn = function() { return language; };
-            
-        fn.trigger = trigger;
-        
-        if (weight)
-            fn.weight = weight;
-        
-        return fn;
-    }
-    
-    return {
-        recognize: recognize
-    };
-})();
-
-if (typeof module !== 'undefined' && module && module.exports)
-    module.exports = functions;
 if (typeof tokenizer === 'undefined')
     var tokenizer = require('./tokenizer');
 
@@ -226,7 +202,49 @@ var checker = (function() {
 
 if (typeof module !== 'undefined' && module && module.exports)
     module.exports = checker;
+if (typeof checker === 'undefined')
+    var checker = require('./checker');
 
+var functions = (function() {
+    function recognize(language, trigger, weight) {
+        var fn;
+        
+        if (typeof language === 'function')
+            fn = function(text, tokens, position, state) { return language(text, tokens, position, state); };
+        else
+            fn = function() { return language; };
+            
+        fn.trigger = trigger;
+        
+        if (weight)
+            fn.weight = weight;
+        
+        return fn;
+    }
+    
+    function recognizeWords(language, words) {
+        var fn = function(text, tokens, position, state) {
+            var token = tokens[position];
+            
+            if (token && words.indexOf(token.value) >= 0)
+                return language;
+            
+            return null;
+        };
+        
+        fn.trigger = [checker.word];
+        
+        return fn;
+    }
+    
+    return {
+        recognize: recognize,
+        recognizeWords: recognizeWords
+    };
+})();
+
+if (typeof module !== 'undefined' && module && module.exports)
+    module.exports = functions;
 if (typeof checker === 'undefined')
     var checker = require('./checker');
     
@@ -252,15 +270,6 @@ var ruby = (function () {
         'def', 'in', 'self', '__FILE__',
         'defined?', 'module', 'super', '__LINE__'
     ];
-
-    function reservedWord(text, tokens, position, state) {
-        var token = tokens[position];
-        
-        if (token && reserved.indexOf(token.value) >= 0)
-            return language;
-        
-        return null;
-    }
 
     function definedp() {
         return language;
@@ -306,7 +315,7 @@ var ruby = (function () {
     }
 
     return {
-        reservedWord: reservedWord,
+        reservedWord: functions.recognizeWords(language, reserved),
         definedp: functions.recognize(language, ['defined', '?']),
         underscoreFile: functions.recognize(language, ['_', '_', 'FILE', '_', '_']),
         underscoreLine: functions.recognize(language, ['_', '_', 'LINE', '_', '_']),
@@ -398,7 +407,7 @@ var python = (function () {
     }
 
     return {
-        reservedWord: reservedWord,
+        reservedWord: functions.recognizeWords(language, reserved),
         fromImport: functions.recognize(language, ['from', whitespace, word, whitespace, 'import' ]),
         importModule: functions.recognize(language, ['import', whitespace, word ]),
         shebang: functions.recognize(language, ['#', '!', '/', 'usr', '/', 'bin', '/', 'python' ]),
@@ -429,6 +438,7 @@ var javascript = (function () {
     var language = 'javascript';
     var whitespace = checker.whitespace;
     var word = checker.word;
+    var newline = checker.newline;
 
     // from https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Reserved_Words
 
@@ -441,15 +451,6 @@ var javascript = (function () {
         'try', 'typeof', 'var', 'void',
         'while', 'with'
     ];
-
-    function reservedWord(text, tokens, position, state) {
-        var token = tokens[position];
-        
-        if (token && reserved.indexOf(token.value) >= 0)
-            return language;
-        
-        return null;
-    }
     
     function withoutParenthesis(text, tokens, position, state) {
         var p = position + 1;
@@ -495,7 +496,7 @@ var javascript = (function () {
     }
     
     return {
-        reservedWord: reservedWord,
+        reservedWord: functions.recognizeWords(language, reserved),
         documentWrite: functions.recognize(language, ['document', '.', 'write']),
         documentGetElementById: functions.recognize(language, ['document', '.', 'getElementById']),
         alertParenthesis: functions.recognize(language, ['alert', '(']),
@@ -513,7 +514,11 @@ var javascript = (function () {
         anonymousFunctionWithWhiteSpace: functions.recognize(language, ['function', whitespace, '(']),
         forWoParenthesis: functions.recognize(withoutParenthesis, ['for'], -1),
         ifWoParenthesis: functions.recognize(withoutParenthesis, ['if'], -1),
-        whileWoParenthesis: functions.recognize(withoutParenthesis, ['while'], -1)
+        whileWoParenthesis: functions.recognize(withoutParenthesis, ['while'], -1),
+        startComment: functions.recognize(language, ['/', '*']),
+        endComment: functions.recognize(language, ['*', '/']),
+        semiColonNewLine: functions.recognize(language, [';', newline]),
+        semiColonWhitespaceNewLine: functions.recognize(language, [';', whitespace, newline])
     };
 })();
 
@@ -523,8 +528,13 @@ if (typeof module !== 'undefined' && module && module.exports)
 if (typeof checker === 'undefined')
     var checker = require('./checker');
 
+if (typeof functions === 'undefined')
+    var functions = require('./functions');
+
 var csharp = (function () {    
     var language = 'csharp';
+    var newline = checker.newline;
+    var whitespace = checker.whitespace;
 
     // from http://msdn.microsoft.com/en-us/library/x53a06bb.aspx
 
@@ -564,12 +574,66 @@ var csharp = (function () {
     }
 
     return {
-        reservedWord: reservedWord
+        reservedWord: reservedWord,
+        lineComment: functions.recognize(language, ['/', '/']),
+        startComment: functions.recognize(language, ['/', '*']),
+        endComment: functions.recognize(language, ['*', '/']),
+        semiColonNewLine: functions.recognize(language, [';', newline]),
+        semiColonWhitespaceNewLine: functions.recognize(language, [';', whitespace, newline])
     };
 })();
 
 if (typeof module !== 'undefined' && module && module.exports)
     module.exports = csharp;
-if (typeof ruby === 'undefined')    var ruby = require('./ruby.js');if (typeof javascript === 'undefined')    var javascript = require('./javascript.js');if (typeof csharp === 'undefined')        var csharp = require('./csharp.js');    if (typeof python === 'undefined')        var python = require('./python.js');    if (typeof checker === 'undefined')        var checker = require('./checker.js');    if (typeof tokenizer === 'undefined')        var tokenizer = require('./tokenizer.js');var plangre = (function() {    var fns = { };    for (n in ruby)        fns['ruby_' + n] = ruby[n];    for (n in python)        fns['python_' + n] = python[n];    for (n in javascript)        fns['javascript_' + n] = javascript[n];    for (n in csharp)        fns['csharp_' + n] = csharp[n];           function analyze(text) {        var tokens = tokenizer.getTokens(text);        var check = checker.check(text, tokens, fns);                var max = 0;        var result = null;                for (n in check) {            if (check[n] > max) {                max = check[n];                result = n;            }        }                return result;    }    return {        analyze: analyze    };})();if (typeof module !== 'undefined' && module && module.exports)    module.exports = plangre;    return plangre;
+
+if (typeof checker === 'undefined')
+    var checker = require('./checker');
+    
+if (typeof functions === 'undefined')
+    var functions = require('./functions');
+
+var java = (function () {    
+    var language = 'java';
+    var whitespace = checker.whitespace;
+    var word = checker.word;
+    var newline = checker.newline;
+
+    // from http://docs.oracle.com/javase/tutorial/java/nutsandbolts/_keywords.html
+
+    var reserved = [
+        'abstract', 'continue', 'for', 'new', 'switch',
+        'assert', 'default', 'goto', 'package', 'synchronized',
+        'boolean', 'do', 'if', 'private', 'this',
+        'break', 'double', 'implements', 'protected', 'throw',
+        'byte',	'else', 'import', 'public', 'throws',
+        'case',	'enum', 'instanceof', 'return', 'transient',
+        'catch', 'extends', 'int', 'short', 'try',
+        'char',	'final', 'interface', 'static', 'void',
+        'class', 'finally', 'long', 'strictfp', 'volatile',
+        'const', 'float', 'native', 'super', 'while'
+    ];
+
+    var types = [
+        'byte', 'char', 'short', 'int', 'long',
+        'float', 'double',
+        'boolean', 'String', 'Object'
+    ];
+    
+    return {
+        reservedWord: functions.recognizeWords(language, reserved),
+        typeWord: functions.recognizeWords(language, types),
+        lineComment: functions.recognize(language, ['/', '/']),
+        startComment: functions.recognize(language, ['/', '*']),
+        endComment: functions.recognize(language, ['*', '/']),
+        semiColonNewLine: functions.recognize(language, [';', newline]),
+        semiColonWhitespaceNewLine: functions.recognize(language, [';', whitespace, newline]),
+		importDottedName: functions.recognize(language, ['import', whitespace, word, '.', word])
+    };
+})();
+
+if (typeof module !== 'undefined' && module && module.exports)
+    module.exports = java;
+if (typeof ruby === 'undefined')    var ruby = require('./ruby.js');if (typeof javascript === 'undefined')    var javascript = require('./javascript.js');if (typeof csharp === 'undefined')        var csharp = require('./csharp.js');    if (typeof python === 'undefined')        var python = require('./python.js');    if (typeof java === 'undefined')        var java = require('./java.js');    if (typeof checker === 'undefined')        var checker = require('./checker.js');    if (typeof tokenizer === 'undefined')        var tokenizer = require('./tokenizer.js');var plangre = (function() {    var fns = { };    for (n in ruby)        fns['ruby_' + n] = ruby[n];    for (n in python)        fns['python_' + n] = python[n];    for (n in javascript)        fns['javascript_' + n] = javascript[n];    for (n in csharp)        fns['csharp_' + n] = csharp[n];    for (n in java)        fns['java_' + n] = java[n];           function analyze(text) {        var tokens = tokenizer.getTokens(text);        var check = checker.check(text, tokens, fns);                var max = 0;        var result = null;                for (n in check) {            if (check[n] > max) {                max = check[n];                result = n;            }        }                return result;    }    return {        analyze: analyze    };})();if (typeof module !== 'undefined' && module && module.exports)    module.exports = plangre;    return plangre;
 
 })();
+
