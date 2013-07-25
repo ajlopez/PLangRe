@@ -1,6 +1,8 @@
 # PLangRe
 
-Programming Language Reconigtion, for Node.js and browser
+Programming Language Reconigtion, for Node.js and browser.
+
+Try it online at http://ajlopez.github.io/PLangRe/
 
 ## Installation
 
