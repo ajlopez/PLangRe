@@ -1,18 +1,19 @@
 
 var prangle = require('..'),
     fs = require('fs'),
-    path = require('path'),
-    assert = require('assert');
+    path = require('path');
 
-processFile('gist01.py');
-processFile('gist02.py');
-processFile('gist03.py');
-processFile('gist04.py');
-processFile('gist05.py');
+exports['process files'] = function (test) {
+    processFile('gist01.py', test);
+    processFile('gist02.py', test);
+    processFile('gist03.py', test);
+    processFile('gist04.py', test);
+    processFile('gist05.py', test);
+}
 
-function processFile(filename) {
+function processFile(filename, test) {
     var text = fs.readFileSync(path.join(__dirname, '..', 'files', 'python', filename)).toString();
     var result = prangle.analyze(text);
 
-    assert.ok(result);    assert.equal(result, 'python');
+    test.ok(result);    test.equal(result, 'python');
 }

@@ -1,115 +1,113 @@
 
 var python = require('../lib/python'),
     tokenizer = require('../lib/tokenizer'),
-    checker = require('../lib/checker'),
-    assert = require('assert');
+    checker = require('../lib/checker');
 
-// test reserved words
+exports['test reserved words'] = function (test) {
+    var text = "\
+    False      class      finally    is         return \
+    None       continue   for        lambda     try \
+    True       def        from       nonlocal   while \
+    and        del        global     not        with \
+    as         elif       if         or         yield \
+    assert     else       import     pass \
+    break      except     in         raise \
+    ";
 
-var text = "\
-False      class      finally    is         return \
-None       continue   for        lambda     try \
-True       def        from       nonlocal   while \
-and        del        global     not        with \
-as         elif       if         or         yield \
-assert     else       import     pass \
-break      except     in         raise \
-";
+    var tokens = tokenizer.getTokens(text);
 
-var tokens = tokenizer.getTokens(text);
+    for (var k = 0; k < tokens.length; k++)
+        if (tokens[k].word)
+            test.equal(python.reservedWord(text, tokens, k, { }), 'python');
+}
 
-for (var k = 0; k < tokens.length; k++)
-    if (tokens[k].word)
-        assert.equal(python.reservedWord(text, tokens, k, { }), 'python');
+exports['import module'] = function (test) {
+    var result = checker.check("import module", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 2);
+}
 
-// import module
+exports['import from module import'] = function (test) {
+    var result = checker.check("from module import *", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 3);
+}
 
-var result = checker.check("import module", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 2);
+exports['shebang'] = function (test) {
+    var result = checker.check("#!/usr/bin/python", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 1);
+}
 
-// import from module import
+exports['shebang with env'] = function (test) {
+    var result = checker.check("#!/usr/bin/env python", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 1);
+}
 
-var result = checker.check("from module import *", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 3);
+exports['class ... colon'] = function (test) {
+    var result = checker.check("class Dog:", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 2);
+}
 
-// shebang
+exports['if ... colon'] = function (test) {
+    var result = checker.check("if x:", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 2);
+}
 
-var result = checker.check("#!/usr/bin/python", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 1);
+exports['while ... colon'] = function (test) {
+    var result = checker.check("while x:", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 2);
+}
 
-// shebang with env
+exports['for ... colon'] = function (test) {
+    var result = checker.check("for x in y:", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 3);
+}
 
-var result = checker.check("#!/usr/bin/env python", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 1);
+exports['def ... colon'] = function (test) {
+    var result = checker.check("def test():", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 2);
+}
 
-// class ... colon
+exports['def with self'] = function (test) {
+    var result = checker.check("def test(self, name):", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 3);
+}
 
-var result = checker.check("class Dog:", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 2);
+exports['__name__, __file__, __init__'] = function (test) {
+    var result = checker.check("__name__ __file__ __init__", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 3);
+}
 
-// if ... colon
+exports['try:'] = function (test) {
+    var result = checker.check("try:", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 2);
+}
 
-var result = checker.check("if x:", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 2);
-
-// while ... colon
-
-var result = checker.check("while x:", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 2);
-
-// for ... colon
-
-var result = checker.check("for x in y:", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 3);
-
-// def ... colon
-
-var result = checker.check("def test():", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 2);
-
-// def with self
-
-var result = checker.check("def test(self, name):", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 3);
-
-// __name__, __file__, __init__
-
-var result = checker.check("__name__ __file__ __init__", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 3);
-
-// try:
-
-var result = checker.check("try:", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 2);
-
-// except ... colon
-
-var result = checker.check("except e:", python);
-assert.ok(result);
-assert.ok(result.python);
-assert.equal(result.python, 2);
-
+exports['except ... colon'] = function (test) {
+    var result = checker.check("except e:", python);
+    test.ok(result);
+    test.ok(result.python);
+    test.equal(result.python, 2);
+}

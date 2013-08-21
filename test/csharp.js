@@ -1,80 +1,80 @@
 
 var csharp = require('../lib/csharp'),
     tokenizer = require('../lib/tokenizer'),
-    checker = require('../lib/checker'),
-    assert = require('assert');
+    checker = require('../lib/checker');
 
-// test reserved words
+exports['test reserved words'] = function (test) {
+    var text = "\
+    abstract as base bool break \
+    byte case catch char checked \
+    class const continue decimal default \
+    delegate do double else enum \
+    event explicit extern false finally \
+    fixed float for foreach goto \
+    if implicit in abstract as \
+    base bool break byte case \
+    catch char checked class const \
+    continue decimal default delegate do \
+    double else enum event explicit \
+    extern false finally fixed float \
+    for foreach goto if implicit \
+    in int int interface internal \
+    is lock long namespace new \
+    null object operator out override \
+    params private protected public readonly \
+    ref return sbyte sealed short \
+    sizeof stackalloc static string struct \
+    switch this throw true try \
+    typeof uint ulong unchecked unsafe \
+    ushort using virtual void volatile \
+    while";
 
-var text = "\
-abstract as base bool break \
-byte case catch char checked \
-class const continue decimal default \
-delegate do double else enum \
-event explicit extern false finally \
-fixed float for foreach goto \
-if implicit in abstract as \
-base bool break byte case \
-catch char checked class const \
-continue decimal default delegate do \
-double else enum event explicit \
-extern false finally fixed float \
-for foreach goto if implicit \
-in int int interface internal \
-is lock long namespace new \
-null object operator out override \
-params private protected public readonly \
-ref return sbyte sealed short \
-sizeof stackalloc static string struct \
-switch this throw true try \
-typeof uint ulong unchecked unsafe \
-ushort using virtual void volatile \
-while";
+    var tokens = tokenizer.getTokens(text);
 
-var tokens = tokenizer.getTokens(text);
+    for (var k = 0; k < tokens.length; k++)
+        if (tokens[k].word)
+            test.equal(csharp.reservedWord(text, tokens, k, { }), 'csharp');
+}
 
-for (var k = 0; k < tokens.length; k++)
-    if (tokens[k].word)
-        assert.equal(csharp.reservedWord(text, tokens, k, { }), 'csharp');
+exports['line comment'] = function (test) {
+    var text = '// a line comment';
 
-// line comment
+    var result = checker.check(text, csharp);
+    test.ok(result);
+    test.ok(result.csharp);
+    test.equal(result.csharp, 1);
+}
 
-var text = '// a line comment';
+exports['comment'] = function (test) {
+    var text = '/* a comment */';
 
-var result = checker.check(text, csharp);
-assert.ok(result);
-assert.ok(result.csharp);
-assert.equal(result.csharp, 1);
+    var result = checker.check(text, csharp);
+    test.ok(result);
+    test.ok(result.csharp);
+    test.equal(result.csharp, 2);
+}
 
-// comment
+exports['semicolon, white space and new line'] = function (test) {
+    var text = 'k;   \n';
 
-var text = '/* a comment */';
+    var result = checker.check(text, csharp);
+    test.ok(result);
+    test.equal(result.csharp, 1);
+}
 
-var result = checker.check(text, csharp);
-assert.ok(result);
-assert.ok(result.csharp);
-assert.equal(result.csharp, 2);
+exports['semicolon, carriage return, new line'] = function (test) {
+    var text = 'k;\r\n';
 
-// semicolon, white space and new line
+    var result = checker.check(text, csharp);
+    test.ok(result);
+    test.equal(result.csharp, 1);
+}
 
-var text = 'k;   \n';
+exports['semicolon, white space, carriage return, new line'] = function (test) {
+    var text = 'k;  \t\r\n';
 
-var result = checker.check(text, csharp);
-assert.ok(result);
-assert.equal(result.csharp, 1);
+    var result = checker.check(text, csharp);
+    test.ok(result);
+    test.equal(result.csharp, 1);
+}
 
-// semicolon, carriage return, new line
-
-var text = 'k;\r\n';
-
-var result = checker.check(text, csharp);
-assert.ok(result);
-assert.equal(result.csharp, 1);
-
-// semicolon, white space, carriage return, new line
-
-var text = 'k;  \t\r\n';
-
-var result = checker.check(text, csharp);
-assert.ok(result);
-assert.equal(result.csharp, 1);

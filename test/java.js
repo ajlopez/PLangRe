@@ -1,86 +1,84 @@
 
 var java = require('../lib/java'),
     tokenizer = require('../lib/tokenizer'),
-    checker = require('../lib/checker'),
-    assert = require('assert');
+    checker = require('../lib/checker');
 
-// test reserved words
+exports['test reserved words'] = function (test) {
+    var text = "\
+        abstract continue for new switch \
+        assert default goto package	synchronized \
+        boolean do if private this \
+        break double implements protected throw \
+        byte else import public	throws \
+        case enum instanceof return transient \
+        catch extends int short try \
+        char final interface static void \
+        class finally long strictfp volatile \
+        const float native super while";
 
-var text = "\
-abstract continue for new switch \
-assert default goto package	synchronized \
-boolean do if private this \
-break double implements protected throw \
-byte else import public	throws \
-case enum instanceof return transient \
-catch extends int short try \
-char final interface static void \
-class finally long strictfp volatile \
-const float native super while";
+    var tokens = tokenizer.getTokens(text);
 
-var tokens = tokenizer.getTokens(text);
+    for (var k = 0; k < tokens.length; k++)
+        if (tokens[k].word)
+            test.equal(java.reservedWord(text, tokens, k, { }), 'java');
+    var types = "\
+        byte char short int long \
+        float double boolean \
+        String Object";
 
-for (var k = 0; k < tokens.length; k++)
-    if (tokens[k].word)
-        assert.equal(java.reservedWord(text, tokens, k, { }), 'java');
-        
-var types = "\
-byte char short int long \
-float double boolean \
-String Object";
+    var tokens = tokenizer.getTokens(types);
 
-var tokens = tokenizer.getTokens(types);
+    for (var k = 0; k < tokens.length; k++)
+        if (tokens[k].word)
+            test.equal(java.typeWord(text, tokens, k, { }), 'java');
+}
 
-for (var k = 0; k < tokens.length; k++)
-    if (tokens[k].word)
-        assert.equal(java.typeWord(text, tokens, k, { }), 'java');
+exports['line comment'] = function (test) {
+    var text = '// a line comment';
 
-// line comment
+    var result = checker.check(text, java);
+    test.ok(result);
+    test.ok(result.java);
+    test.equal(result.java, 1);
+}
 
-var text = '// a line comment';
+exports['comment'] = function (test) {
+    var text = '/* a comment */';
 
-var result = checker.check(text, java);
-assert.ok(result);
-assert.ok(result.java);
-assert.equal(result.java, 1);
+    var result = checker.check(text, java);
+    test.ok(result);
+    test.ok(result.java);
+    test.equal(result.java, 2);
+}
 
-// comment
+exports['semicolon, white space and new line'] = function (test) {
+    var text = 'k;   \n';
 
-var text = '/* a comment */';
+    var result = checker.check(text, java);
+    test.ok(result);
+    test.equal(result.java, 1);
+}
 
-var result = checker.check(text, java);
-assert.ok(result);
-assert.ok(result.java);
-assert.equal(result.java, 2);
+exports['semicolon, carriage return, new line'] = function (test) {
+    var text = 'k;\r\n';
 
-// semicolon, white space and new line
+    var result = checker.check(text, java);
+    test.ok(result);
+    test.equal(result.java, 1);
+}
 
-var text = 'k;   \n';
+exports['semicolon, white space, carriage return, new line'] = function (test) {
+    var text = 'k;  \t\r\n';
 
-var result = checker.check(text, java);
-assert.ok(result);
-assert.equal(result.java, 1);
+    var result = checker.check(text, java);
+    test.ok(result);
+    test.equal(result.java, 1);
+}
 
-// semicolon, carriage return, new line
+exports['import with dotted name'] = function (test) {
+    var text = 'import java.io;';
 
-var text = 'k;\r\n';
-
-var result = checker.check(text, java);
-assert.ok(result);
-assert.equal(result.java, 1);
-
-// semicolon, white space, carriage return, new line
-
-var text = 'k;  \t\r\n';
-
-var result = checker.check(text, java);
-assert.ok(result);
-assert.equal(result.java, 1);
-
-// import with dotted name
-
-var text = 'import java.io;';
-
-var result = checker.check(text, java);
-assert.ok(result);
-assert.equal(result.java, 2);
+    var result = checker.check(text, java);
+    test.ok(result);
+    test.equal(result.java, 2);
+}
