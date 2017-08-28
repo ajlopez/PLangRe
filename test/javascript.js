@@ -89,7 +89,7 @@ exports['strict not equal'] = function (test) {
 }
 
 exports['name in JSON'] = function (test) {
-    var text = 'name: 1';
+    var text = '{ name: 1 }';
 
     var result = checker.check(text, javascript);
     test.ok(result);
@@ -97,8 +97,16 @@ exports['name in JSON'] = function (test) {
     test.equal(result.javascript, 1);
 }
 
+exports['name in JSON without braces'] = function (test) {
+    var text = 'name: 1';
+
+    var result = checker.check(text, javascript);
+    test.ok(result);
+    test.equal(result.javascript, null);
+}
+
 exports['name with whitespace in JSON'] = function (test) {
-    var text = 'name : 1';
+    var text = '{ name : 1 }';
 
     var result = checker.check(text, javascript);
     test.ok(result);
@@ -107,7 +115,7 @@ exports['name with whitespace in JSON'] = function (test) {
 }
 
 exports['single quote name in JSON'] = function (test) {
-    var text = "'name': 1";
+	var text = "{ 'name': 1 }";
 
     var result = checker.check(text, javascript);
     test.ok(result);
@@ -116,7 +124,7 @@ exports['single quote name in JSON'] = function (test) {
 }
 
 exports['double quote name in JSON'] = function (test) {
-    var text = '"name": 1';
+	var text = '{"name": 1}';
 
     var result = checker.check(text, javascript);
     test.ok(result);
@@ -125,7 +133,7 @@ exports['double quote name in JSON'] = function (test) {
 }
 
 exports['single quote name, whitespace in JSON'] = function (test) {
-    var text = "'name' : 1";
+	var text = "{ 'name' : 1 }";
 
     var result = checker.check(text, javascript);
     test.ok(result);
@@ -134,7 +142,7 @@ exports['single quote name, whitespace in JSON'] = function (test) {
 }
 
 exports['double quote name, whitespace in JSON'] = function (test) {
-    var text = '"name" : 1';
+    var text = '{ "name" : 1 }';
 
     var result = checker.check(text, javascript);
     test.ok(result);
@@ -143,7 +151,7 @@ exports['double quote name, whitespace in JSON'] = function (test) {
 }
 
 exports['name colon newline not recognized'] = function (test) {
-    var text = 'name:\n';
+    var text = '{name:\n}';
 
     var result = checker.check(text, javascript);
     test.ok(result);
